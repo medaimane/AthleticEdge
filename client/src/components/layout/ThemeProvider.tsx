@@ -20,9 +20,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     const savedTheme = localStorage.getItem("theme") as Theme;
     if (savedTheme) {
       setTheme(savedTheme);
-      if (savedTheme === "light") {
-        document.documentElement.classList.add("light");
-      }
+      document.documentElement.classList.add(savedTheme);
     }
   }, []);
 
@@ -30,13 +28,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     setTheme((prevTheme) => {
       const newTheme = prevTheme === "dark" ? "light" : "dark";
       localStorage.setItem("theme", newTheme);
-      
-      if (newTheme === "light") {
-        document.documentElement.classList.add("light");
-      } else {
-        document.documentElement.classList.remove("light");
-      }
-      
+      document.documentElement.classList.add(newTheme);
       return newTheme;
     });
   };
@@ -50,7 +42,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
